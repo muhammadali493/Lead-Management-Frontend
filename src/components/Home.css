@@ -1,0 +1,142 @@
+.home-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 2rem 1rem;
+  font-family: "Inter", sans-serif;
+  color: #2c3e50;
+}
+
+.hero-section h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #2c3e50;
+}
+
+.tagline {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+.subtext {
+  color: #555;
+  margin-top: 0.5rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero-buttons {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.btn {
+  padding: 0.7rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.btn.primary {
+  background-color: #ffd700;
+  color: #2c3e50;
+}
+
+.btn.primary:hover {
+  background-color: #ffea61;
+}
+
+.btn.secondary {
+  border: 2px solid #ffd700;
+  color: #2c3e50;
+}
+
+.btn.secondary:hover {
+  background-color: #fff8d1;
+}
+
+.btn.small {
+  background-color: #f4f4f4;
+  color: #2c3e50;
+  margin-top: 0.8rem;
+}
+
+.features-section {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 3rem;
+}
+
+.feature-card {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: 300px;
+  background-color: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.feature-card h3 {
+  color: #2c3e50;
+}
+
+.tags {
+  margin: 0.8rem 0;
+}
+
+.tags span {
+  background-color: #fff4b3;
+  color: #2c3e50;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  margin: 0 0.2rem;
+  font-size: 0.85rem;
+}
+
+.export-section {
+  margin-top: 4rem;
+  padding: 2rem;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+}
+
+.why-section {
+  margin-top: 4rem;
+}
+
+.why-cards {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.why-card {
+  background: #fff;
+  border: 1px solid #eee;
+  padding: 1.2rem;
+  border-radius: 10px;
+  width: 250px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+}
+
+.cta-section {
+  background-color: #fffbe0;
+  padding: 3rem 1rem;
+  margin-top: 4rem;
+  border-radius: 12px;
+}
+
+.btn.cta {
+  background-color: #ffd700;
+  color: #2c3e50;
+  margin-top: 1rem;
+  display: inline-block;
+}
