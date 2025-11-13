@@ -7,7 +7,7 @@ function Navbar() {
     <nav className="navbar">
       <div className="navbar-container">
         <div className="navbar-brand">
-          <span className="lemon-icon">🕵️‍♂️</span>
+          {/* <span className="lemon-icon">🕵️‍♂️</span> */}
           <span className="brand-text">DataHunt App</span>
         </div>
         
