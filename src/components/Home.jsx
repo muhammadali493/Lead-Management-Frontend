@@ -6,7 +6,7 @@ function Home() {
     <div className="home-container">
       {/* Hero Section */}
       <section className="hero-section">
-        <h1>🕵️‍♂️ DataHunt</h1>
+        <h1> DataHunt</h1>
         <p className="tagline">
           When data hides, we hunt it down.
         </p>
@@ -27,8 +27,11 @@ function Home() {
       {/* Features Section */}
       <section className="features-section">
         <div className="feature-card">
-          <h3>📤 Upload Data</h3>
-          <p>
+
+          <div className="card-header">
+            <h3>Upload Data</h3>
+          </div>
+          <p className="card-description">
             Import your datasets easily with CSV or Excel. Supports mapping and
             bulk uploads.
           </p>
@@ -42,8 +45,10 @@ function Home() {
         </div>
 
         <div className="feature-card">
-          <h3>🔎 Search & Filter</h3>
-          <p>
+          <div className="card-header">
+            <h3>Search & Filter</h3>
+          </div>
+          <p className="card-description">
             Discover insights using advanced filters — search by company, role,
             or location.
           </p>
@@ -59,30 +64,48 @@ function Home() {
 
       {/* Export Section */}
       <section className="export-section">
-        <h2>📁 Export Your Data</h2>
-        <p>
-          Download filtered results to CSV or Excel — complete with company
-          relationships and organized columns.
-        </p>
-        <NavLink to="/export-contacts" className="btn primary">
-          Export Contacts
-        </NavLink>
+        <div className="export-content">
+          <h2>Export Your Data</h2>
+          <p className="export-description">
+            Download filtered results to CSV or Excel — complete with company
+            relationships and organized columns.
+          </p>
+          <NavLink to="/export-contacts" className="btn primary">
+            Export Contacts
+          </NavLink>
+        </div>
       </section>
 
       {/* Why Choose Section */}
       <section className="why-section">
         <h2>Why Choose DataHunt?</h2>
+        <p className="why-subtitle">
+          Built for modern teams who need reliable, fast, and intelligent data management.
+        </p>
+
         <div className="why-cards">
+          {/* Card 1 */}
           <div className="why-card">
-            <h4>🤖 Smart Deduplication</h4>
+            <div className="why-icon-container">
+              <span className="why-badge">AI-Powered</span>
+            </div>
+            <h4>Smart Deduplication</h4>
             <p>Automatically detect and merge duplicate data entries.</p>
           </div>
+          {/* Card 2 */}
           <div className="why-card">
-            <h4>🎯 Intelligent Filtering</h4>
+            <div className="why-icon-container">
+              <span className="why-badge">Sales-Ready</span>
+            </div>
+            <h4> Intelligent Filtering</h4>
             <p>Filter and target datasets with precision.</p>
           </div>
+          {/* Card 3 */}
           <div className="why-card">
-            <h4>⚡ Lightning Fast</h4>
+            <div className="why-icon-container">
+              <span className="why-badge">Scalable</span>
+            </div>
+            <h4>Lightning Fast</h4>
             <p>Optimized for real-time search and exports.</p>
           </div>
         </div>
