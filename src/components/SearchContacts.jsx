@@ -82,7 +82,7 @@ function SearchContacts() {
       }
 
       const data = await response.json();
-
+      console.log(`Data fetched: ${data}`)
       if (data.items && Array.isArray(data.items)) {
         setResults(data.items);
         setShowResults(true);
