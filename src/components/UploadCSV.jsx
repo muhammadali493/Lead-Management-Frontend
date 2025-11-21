@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { API_ENDPOINTS } from "../config/api";
 import "./UploadCSV.css";
 
 function UploadCSV() {
@@ -112,7 +113,11 @@ function UploadCSV() {
         });
       }, 200);
 
-      const response = await fetch("http://192.168.18.9:8005/upload", {
+      // const response = await fetch("http://192.168.18.9:8005/upload", {
+      //   method: "POST",
+      //   body: formData,
+      // });
+      const response = await fetch(`${API_ENDPOINTS.upload}`, {
         method: "POST",
         body: formData,
       });

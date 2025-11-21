@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import './ExportContacts.css';
+import { API_ENDPOINTS } from '../config/api';
 
 function ExportContacts() {
   const [filters, setFilters] = useState({
@@ -201,7 +202,8 @@ function ExportContacts() {
       queryParams.set('limit', limit);
       queryParams.set('offset', offset);
       
-      const apiUrl = `http://192.168.18.9:8005/leads?${queryParams.toString()}`;
+      //const apiUrl = `http://192.168.18.9:8005/leads?${queryParams.toString()}`;
+      const apiUrl = `${API_ENDPOINTS.leads}?${queryParams.toString()}`;
       console.log(`API Request URL is: ${apiUrl}`)
       const response = await fetch(apiUrl, {
         method: 'GET',
@@ -324,7 +326,8 @@ function ExportContacts() {
       queryParams.set('format', exportFormat);
       queryParams.set('mode', exportMode);
 
-      const apiUrl = `http://192.168.18.9:8005/leads/export?${queryParams.toString()}`;
+      //const apiUrl = `http://192.168.18.9:8005/leads/export?${queryParams.toString()}`;
+      const apiUrl = `${API_ENDPOINTS.leadsExport}?${queryParams.toString()}`;
 
       const response = await fetch(apiUrl, {
         method: 'GET',

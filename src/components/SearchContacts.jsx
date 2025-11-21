@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { API_ENDPOINTS } from '../config/api';
 import './SearchContacts.css';
 
 function SearchContacts() {
@@ -63,7 +64,8 @@ function SearchContacts() {
       queryParams.offset = offset;
 
       const queryString = new URLSearchParams(queryParams).toString();
-      const apiUrl = `http://192.168.18.9:8005/leads?${queryString}`;
+      //const apiUrl = `http://192.168.18.9:8005/leads?${queryString}`;
+      const apiUrl = `${API_ENDPOINTS.leads}?${queryString}`;
 
       const response = await fetch(apiUrl, {
         method: 'GET',
@@ -311,34 +313,6 @@ function SearchContacts() {
     return <div className="location-empty">N/A</div>;
   };
 
-  // OLD CODE - No longer needed with new approach
-  // const formatLocation = (city, state, country) => {
-  //   const parts = [];
-  //   if (city) parts.push(city);
-  //   if (state) parts.push(state);
-  //   
-  //   const cityState = parts.join(', ');
-  //   
-  //   if (cityState && country) {
-  //     return (
-  //       <>
-  //         <div className="location-primary">{cityState}</div>
-  //         <div className="location-secondary">{country}</div>
-  //       </>
-  //     );
-  //   } else if (cityState) {
-  //     return <div className="location-primary">{cityState}</div>;
-  //   } else if (country) {
-  //     return <div className="location-secondary">{country}</div>;
-  //   }
-  //   
-  //   return <div className="location-empty">N/A</div>;
-  // };
-
-  // OLD CODE - No longer needed with new approach
-  // const hasContactLocation = (contact) => {
-  //   return contact.contact_city || contact.contact_state || contact.contact_country;
-  // };
   const formatFieldName = (fieldName) => {
     return fieldName
       .split('_')
