@@ -1,10 +1,11 @@
 import { Routes, Route } from 'react-router-dom'
+import './App.css'
 import Navbar from './components/Navbar'
 import Home from './components/Home'
 import UploadCSV from './components/UploadCSV'
 import SearchContacts from './components/SearchContacts'
 import ExportContacts from './components/ExportContacts'
-import './App.css'
+
 
 function App() {
   return (
