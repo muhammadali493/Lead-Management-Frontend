@@ -133,7 +133,11 @@ function UploadCSV() {
 
       setStatus("Success");
       setUploadProgress(100);
-      setMessage("File uploaded and scanned successfully!");
+      setMessage(`Total records ${data.total_rows}. Imported ${data.imported_rows} records. ${data.skipped_existing_in_db
+} records already existed. ${data.skipped_in_file_duplicates} records were duplicates in file. ${data.skipped_in_file_duplicates
+} Invalid emails.`)
+      //setMessage(data.message);
+      //setMessage("File uploaded and scanned successfully!");
     } catch (error) {
       console.error("File Upload error: ", error);
       setStatus("Error");

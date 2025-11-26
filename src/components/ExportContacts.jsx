@@ -51,6 +51,8 @@ function ExportContacts() {
 
   // Company size range options
   const companySizeRangeOptions = [
+    '0 - 1 (Self-employed)',
+    '1 - 10',
     '2 - 10',
     '11 - 50',
     '51 - 200',
