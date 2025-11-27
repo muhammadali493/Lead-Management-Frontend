@@ -1,6 +1,81 @@
 import { useState, useRef, useEffect } from 'react';
 import './ExportContacts.css';
 import { API_ENDPOINTS } from '../config/api';
+import NestedMultiSelect from './NestedMultiSelect';
+
+// Industry data structure
+const INDUSTRY_OPTIONS = {
+  'Technology': [
+    'Software Development',
+    'IT Services',
+    'Computer Hardware',
+    'Telecommunications',
+    'Internet Services',
+    'Cloud Computing',
+    'Cybersecurity',
+    'Artificial Intelligence'
+  ],
+  'Healthcare': [
+    'Hospitals & Clinics',
+    'Pharmaceuticals',
+    'Medical Devices',
+    'Biotechnology',
+    'Health Insurance',
+    'Healthcare IT',
+    'Mental Health Services'
+  ],
+  'Finance': [
+    'Banking',
+    'Investment Banking',
+    'Insurance',
+    'Asset Management',
+    'Financial Technology',
+    'Accounting',
+    'Real Estate Finance'
+  ],
+  'Manufacturing': [
+    'Automotive',
+    'Aerospace',
+    'Electronics',
+    'Textiles',
+    'Food & Beverage',
+    'Chemicals',
+    'Machinery'
+  ],
+  'Retail': [
+    'E-commerce',
+    'Supermarkets',
+    'Fashion & Apparel',
+    'Consumer Electronics',
+    'Home & Garden',
+    'Specialty Retail'
+  ],
+  'Education': [
+    'Higher Education',
+    'K-12 Education',
+    'EdTech',
+    'Training & Development',
+    'Online Learning',
+    'Educational Publishing'
+  ],
+  'Energy': [
+    'Oil & Gas',
+    'Renewable Energy',
+    'Utilities',
+    'Mining',
+    'Power Generation',
+    'Energy Services'
+  ],
+  'Media & Entertainment': [
+    'Broadcasting',
+    'Film & Television',
+    'Music',
+    'Publishing',
+    'Gaming',
+    'Advertising',
+    'Social Media'
+  ]
+};
 
 function ExportContacts() {
   const [filters, setFilters] = useState({
@@ -12,7 +87,7 @@ function ExportContacts() {
     company_name: '',
     job_title: [],
     company_country: '',
-    company_industry: '',
+    company_industry: [], // Changed to array
     company_city: '',
     company_size: '',
     contact_city: '',
@@ -96,6 +171,15 @@ function ExportContacts() {
     setFilters(prev => ({
       ...prev,
       [name]: value
+    }));
+    if (errorMessage) setErrorMessage('');
+  };
+  
+  // Handle company industry change
+  const handleCompanyIndustryChange = (selectedIndustries) => {
+    setFilters(prev => ({
+      ...prev,
+      company_industry: selectedIndustries
     }));
     if (errorMessage) setErrorMessage('');
   };
@@ -328,7 +412,7 @@ function ExportContacts() {
       company_name: '',
       job_title: [],
       company_country: '',
-      company_industry: '',
+      company_industry: [], // Changed to array
       company_city: '',
       company_size: '',
       contact_city: '',
@@ -718,14 +802,20 @@ function ExportContacts() {
 
           <div className="filter-field">
             <label className="filter-label">Company Industry</label>
-            <input
+            <NestedMultiSelect
+              options={INDUSTRY_OPTIONS}
+              value={filters.company_industry}
+              onChange={handleCompanyIndustryChange}
+              placeholder="Select Industry"
+            />
+            {/* <input
               type="text"
               name="company_industry"
               value={filters.company_industry}
               onChange={handleFilterChange}
               placeholder="Enter company industry"
               className="filter-input"
-            />
+            /> */}
           </div>
 
           <div className="filter-field">

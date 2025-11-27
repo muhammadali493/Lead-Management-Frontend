@@ -1,0 +1,340 @@
+/* Nested Multi-Select Styles */
+.nested-multiselect-container {
+  position: relative;
+  width: 100%;
+}
+
+.nested-multiselect-input-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  min-height: 44px;
+  background: white;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.nested-multiselect-input-wrapper:hover {
+  border-color: #bbb;
+}
+
+.nested-multiselect-input-wrapper:focus {
+  outline: none;
+  border-color: #ffd700;
+}
+
+.nested-multiselect-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-height: 24px;
+}
+
+.nested-multiselect-placeholder {
+  color: #999;
+  font-size: 0.95rem;
+  user-select: none;
+}
+
+.nested-multiselect-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #ffd700;
+  color: #1a1a1a;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  max-width: 100%;
+  transition: background 0.2s;
+}
+
+.nested-multiselect-chip:hover {
+  background: #ffed4e;
+}
+
+.nested-multiselect-chip .chip-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 150px;
+}
+
+.nested-multiselect-chip .chip-remove {
+  background: none;
+  border: none;
+  color: #1a1a1a;
+  font-size: 1.3rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.nested-multiselect-chip .chip-remove:hover {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.nested-multiselect-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: 0.5rem;
+  flex-shrink: 0;
+}
+
+.nested-multiselect-clear-all {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.nested-multiselect-clear-all:hover {
+  background: #f5f5f5;
+  color: #333;
+}
+
+.nested-multiselect-dropdown-arrow {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+}
+
+.nested-multiselect-dropdown-arrow.open {
+  transform: rotate(180deg);
+}
+
+.nested-multiselect-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  display: flex;
+  min-height: 250px;
+  max-height: 400px;
+  animation: dropdownSlideIn 0.2s ease-out;
+}
+
+@keyframes dropdownSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nested-main-industries {
+  flex: 1;
+  border-right: 1px solid #e0e0e0;
+  overflow-y: auto;
+  min-width: 200px;
+}
+
+.nested-main-industry-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  user-select: none;
+  position: relative;
+}
+
+.nested-main-industry-item:hover,
+.nested-main-industry-item.hovered {
+  background: #f8f8f8;
+}
+
+.nested-main-industry-item.partial {
+  background: #fff9e6;
+}
+
+.nested-main-industry-item.all {
+  background: #fff9e6;
+}
+
+.nested-industry-checkbox {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #ffd700;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.nested-main-industry-item.all .nested-industry-checkbox {
+  background: #ffd700;
+  border-color: #ffd700;
+  color: #1a1a1a;
+}
+
+.nested-main-industry-item.partial .nested-industry-checkbox {
+  background: #fff5cc;
+  border-color: #ffd700;
+  color: #1a1a1a;
+}
+
+.nested-industry-text {
+  flex: 1;
+  font-size: 0.95rem;
+  color: #1a1a1a;
+}
+
+.nested-industry-arrow {
+  font-size: 0.7rem;
+  color: #999;
+  flex-shrink: 0;
+}
+
+.nested-sub-industries {
+  flex: 1.5;
+  overflow-y: auto;
+  background: #fafafa;
+  min-width: 250px;
+}
+
+.nested-sub-industries-title {
+  padding: 1rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #1a1a1a;
+  border-bottom: 1px solid #e0e0e0;
+  background: white;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.nested-sub-industry-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  user-select: none;
+}
+
+.nested-sub-industry-item:hover {
+  background: #f0f0f0;
+}
+
+.nested-sub-industry-item.selected {
+  background: #fff9e6;
+}
+
+.nested-sub-industry-item.selected:hover {
+  background: #fff5cc;
+}
+
+.nested-sub-industry-text {
+  font-size: 0.95rem;
+  color: #1a1a1a;
+  flex: 1;
+}
+
+.nested-checkmark {
+  color: #ffd700;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-left: 0.5rem;
+}
+
+/* Scrollbar styling */
+.nested-main-industries::-webkit-scrollbar,
+.nested-sub-industries::-webkit-scrollbar {
+  width: 8px;
+}
+
+.nested-main-industries::-webkit-scrollbar-track,
+.nested-sub-industries::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 6px;
+}
+
+.nested-main-industries::-webkit-scrollbar-thumb,
+.nested-sub-industries::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 6px;
+}
+
+.nested-main-industries::-webkit-scrollbar-thumb:hover,
+.nested-sub-industries::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .nested-multiselect-chip .chip-text {
+    max-width: 100px;
+  }
+
+  .nested-multiselect-dropdown {
+    flex-direction: column;
+    max-height: 350px;
+  }
+
+  .nested-main-industries {
+    border-right: none;
+    border-bottom: 1px solid #e0e0e0;
+    max-height: 150px;
+  }
+
+  .nested-sub-industries {
+    max-height: 200px;
+  }
+}
