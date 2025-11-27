@@ -10,7 +10,7 @@ function ExportContacts() {
     last_name: '',
     email: '',
     company_name: '',
-    job_title: [], 
+    job_title: [],
     company_country: '',
     company_industry: '',
     company_city: '',
@@ -21,17 +21,21 @@ function ExportContacts() {
     contact_location: '',
     company_location: '',
     company_state: '',
-    company_size_range: [], 
-    email_validation: '',
+    company_size_range: [],
+    email_validation: [],//'',
     email_total_ai: ''
   });
 
   // State for chip input
   const [jobTitleInput, setJobTitleInput] = useState('');
-  
+
   // State for company size range dropdown
   const [isSizeRangeDropdownOpen, setIsSizeRangeDropdownOpen] = useState(false);
   const sizeRangeDropdownRef = useRef(null);
+
+  // state for email validation dropdown
+  const [isEmailValidationDropdownOpen, setIsEmailValidationDropdownOpen] = useState(false);
+  const emailValidationDropdownRef = useRef(null);
 
   const [results, setResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
@@ -41,12 +45,12 @@ function ExportContacts() {
   const [errorMessage, setErrorMessage] = useState('');
   const [selectedContact, setSelectedContact] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  
+
   // Export functionality state
   const [exportFormat, setExportFormat] = useState('csv');
   const [exportMode, setExportMode] = useState('standard');
   const [exporting, setExporting] = useState(false);
-  
+
   const resultsPerPage = 50;
 
   // Company size range options
@@ -60,12 +64,24 @@ function ExportContacts() {
     '501 - 1000',
     '1001 - 5000'
   ];
-
+  const emailValidationOptions = [
+    'Valid',
+    'Invalid',
+    'Accept all',
+    'Catch all',
+    'Risky',
+    'Unknown'
+  ];
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (sizeRangeDropdownRef.current && !sizeRangeDropdownRef.current.contains(event.target)) {
+        console.log("User clicked Outside Company size range Dropdown")
         setIsSizeRangeDropdownOpen(false);
+      }
+      if (emailValidationDropdownRef.current && !emailValidationDropdownRef.current.contains(event.target)){
+        console.log("User Clicked Outside Email Validation Dropdown")
+        setIsEmailValidationDropdownOpen(false);
       }
     };
 
@@ -89,10 +105,10 @@ function ExportContacts() {
     if (e.key === 'Enter') {
       e.preventDefault();
       const trimmedValue = jobTitleInput.trim();
-      
+
       if (trimmedValue === '') {
         console.log("Ignoring Empty Entry")
-        return; 
+        return;
       }
 
       // Check for duplicates (case-insensitive)
@@ -129,7 +145,7 @@ function ExportContacts() {
   // Handle company size range selection
   const handleCompanySizeRangeSelect = (option) => {
     const isDuplicate = filters.company_size_range.includes(option);
-    
+
     if (!isDuplicate) {
       console.log(`Adding ${option} to company_size_range array`);
       setFilters(prev => ({
@@ -171,7 +187,57 @@ function ExportContacts() {
       setIsSizeRangeDropdownOpen(false);
     }
   };
+  /*Email Validation handlers*/
+  // Toggle email validation dropdown
+  const toggleEmailValidationDropdown = () => {
+    setIsEmailValidationDropdownOpen(prev => !prev);
+  };
 
+  // Handle email validation selection
+  const handleEmailValidationSelect = (option) => {
+    const isDuplicate = filters.email_validation.includes(option);
+
+    if (!isDuplicate) {
+      console.log(`Adding ${option} to email_validation array`);
+      setFilters(prev => ({
+        ...prev,
+        email_validation: [...prev.email_validation, option]
+      }));
+      if (errorMessage) setErrorMessage('');
+    } else {
+      // Remove if already selected
+      console.log(`Removing ${option} from email_validation array`);
+      setFilters(prev => ({
+        ...prev,
+        email_validation: prev.email_validation.filter(item => item !== option)
+      }));
+    }
+  };
+
+  // Remove email validation chip
+  const removeEmailValidation = (indexToRemove) => {
+    console.log(`Removing ${filters.email_validation[indexToRemove]} from email_validation array`);
+    setFilters(prev => ({
+      ...prev,
+      email_validation: prev.email_validation.filter((_, index) => index !== indexToRemove)
+    }));
+  };
+
+  // Clear all email validations
+  const clearAllEmailValidations = () => {
+    console.log('Clearing all email validations');
+    setFilters(prev => ({
+      ...prev,
+      email_validation: []
+    }));
+  };
+
+  // Handle keyboard navigation in email validation dropdown
+  const handleEmailValidationKeyDown = (e) => {
+    if (e.key === 'Escape') {
+      setIsEmailValidationDropdownOpen(false);
+    }
+  };
   const handleSearch = async () => {
     setLoading(true);
     setShowResults(false);
@@ -179,10 +245,10 @@ function ExportContacts() {
 
     try {
       const queryParams = new URLSearchParams();
-      
+
       Object.keys(filters).forEach(key => {
         const value = filters[key];
-        
+
         // Handle array values (job_title, company_size_range)
         if (Array.isArray(value)) {
           if (value.length > 0) {
@@ -203,7 +269,7 @@ function ExportContacts() {
       const offset = (currentPage - 1) * resultsPerPage;
       queryParams.set('limit', limit);
       queryParams.set('offset', offset);
-      
+
       //const apiUrl = `http://192.168.18.9:8005/leads?${queryParams.toString()}`;
       const apiUrl = `${API_ENDPOINTS.leads}?${queryParams.toString()}`;
       console.log(`API Request URL is: ${apiUrl}`)
@@ -260,7 +326,7 @@ function ExportContacts() {
       last_name: '',
       email: '',
       company_name: '',
-      job_title: [], 
+      job_title: [],
       company_country: '',
       company_industry: '',
       company_city: '',
@@ -271,8 +337,8 @@ function ExportContacts() {
       contact_location: '',
       company_location: '',
       company_state: '',
-      company_size_range: [], 
-      email_validation: '',
+      company_size_range: [],
+      email_validation: [],//'',
       email_total_ai: ''
     });
     setJobTitleInput(''); // Clear chip input
@@ -304,10 +370,10 @@ function ExportContacts() {
 
     try {
       const queryParams = new URLSearchParams();
-      
+
       Object.keys(filters).forEach(key => {
         const value = filters[key];
-        
+
         // Handle array values (job_title, company_size_range)
         if (Array.isArray(value)) {
           if (value.length > 0) {
@@ -348,7 +414,7 @@ function ExportContacts() {
 
       // Get the blob from response
       const blob = await response.blob();
-      
+
       // Create download link
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -356,7 +422,7 @@ function ExportContacts() {
       a.download = `contacts_export_${new Date().getTime()}.${exportFormat}`;
       document.body.appendChild(a);
       a.click();
-      
+
       // Cleanup
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
@@ -384,10 +450,10 @@ function ExportContacts() {
 
   const getEmailValidationBadge = (validation) => {
     if (!validation) return null;
-    
+
     const validationLower = validation.toLowerCase();
     let badgeClass = 'email-badge';
-    
+
     if (validationLower.includes('valid') && !validationLower.includes('invalid')) {
       badgeClass += ' email-badge-valid';
     } else if (validationLower.includes('accept')) {
@@ -397,7 +463,7 @@ function ExportContacts() {
     } else {
       badgeClass += ' email-badge-default';
     }
-    
+
     return (
       <span className={badgeClass}>
         {validation}
@@ -407,10 +473,10 @@ function ExportContacts() {
 
   const getSourceBadge = (sourceType) => {
     if (!sourceType) return null;
-    
+
     const sourceLower = sourceType.toLowerCase();
     let badgeClass = 'source-badge';
-    
+
     if (sourceLower === 'seamless') {
       badgeClass += ' source-badge-seamless';
     } else if (sourceLower === 'skrapp') {
@@ -418,7 +484,7 @@ function ExportContacts() {
     } else {
       badgeClass += ' source-badge-default';
     }
-    
+
     return (
       <span className={badgeClass}>
         {sourceType}
@@ -430,10 +496,10 @@ function ExportContacts() {
     if (!dateString) return 'N/A';
     try {
       const date = new Date(dateString);
-      return date.toLocaleDateString('en-US', { 
-        month: 'short', 
-        day: 'numeric', 
-        year: 'numeric' 
+      return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
       });
     } catch {
       return dateString;
@@ -444,9 +510,9 @@ function ExportContacts() {
     if (!locationString || typeof locationString !== 'string') {
       return { city: null, state: null, country: null };
     }
-    
+
     const parts = locationString.split(',').map(part => part.trim()).filter(Boolean);
-    
+
     if (parts.length === 3) {
       return { city: parts[0], state: parts[1], country: parts[2] };
     } else if (parts.length === 2) {
@@ -454,7 +520,7 @@ function ExportContacts() {
     } else if (parts.length === 1) {
       return { city: null, state: null, country: parts[0] };
     }
-    
+
     return { city: null, state: null, country: null };
   };
 
@@ -466,11 +532,11 @@ function ExportContacts() {
         country: contact.contact_country || null
       };
     }
-    
+
     if (contact.contact_location) {
       return parseLocationString(contact.contact_location);
     }
-    
+
     return { city: null, state: null, country: null };
   };
 
@@ -482,23 +548,23 @@ function ExportContacts() {
         country: contact.company_country || null
       };
     }
-    
+
     if (contact.company_location) {
       return parseLocationString(contact.company_location);
     }
-    
+
     return { city: null, state: null, country: null };
   };
 
   const formatLocation = (locationData) => {
     const { city, state, country } = locationData;
-    
+
     const parts = [];
     if (city) parts.push(city);
     if (state) parts.push(state);
-    
+
     const cityState = parts.join(', ');
-    
+
     if (cityState && country) {
       return (
         <>
@@ -511,7 +577,7 @@ function ExportContacts() {
     } else if (country) {
       return <div className="location-secondary">{country}</div>;
     }
-    
+
     return <div className="location-empty">N/A</div>;
   };
 
@@ -761,7 +827,7 @@ function ExportContacts() {
           <div className="filter-field">
             <label className="filter-label">Company Size Range</label>
             <div className="multiselect-container" ref={sizeRangeDropdownRef}>
-              <div 
+              <div
                 className="multiselect-input-wrapper"
                 onClick={toggleSizeRangeDropdown}
                 onKeyDown={handleSizeRangeKeyDown}
@@ -815,7 +881,7 @@ function ExportContacts() {
                   </button>
                 </div>
               </div>
-              
+
               {isSizeRangeDropdownOpen && (
                 <div className="multiselect-dropdown" role="listbox">
                   {companySizeRangeOptions.map((option, index) => {
@@ -840,7 +906,7 @@ function ExportContacts() {
             </div>
           </div>
 
-          <div className="filter-field">
+          {/* <div className="filter-field">
             <label className="filter-label">Email Validation</label>
             <input
               type="text"
@@ -850,6 +916,87 @@ function ExportContacts() {
               placeholder="e.g., valid, invalid"
               className="filter-input"
             />
+          </div> */}
+          <div className="filter-field">
+            <label className="filter-label">Email Validation</label>
+            <div className="multiselect-container" ref={emailValidationDropdownRef}>
+              <div
+                className="multiselect-input-wrapper"
+                onClick={toggleEmailValidationDropdown}
+                onKeyDown={handleEmailValidationKeyDown}
+                tabIndex={0}
+                role="button"
+                aria-expanded={isEmailValidationDropdownOpen}
+                aria-haspopup="listbox"
+              >
+                <div className="multiselect-tags">
+                  {filters.email_validation.length > 0 ? (
+                    filters.email_validation.map((validation, index) => (
+                      <div key={index} className="multiselect-chip">
+                        <span className="chip-text">{validation}</span>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            removeEmailValidation(index);
+                          }}
+                          className="chip-remove"
+                          aria-label={`Remove ${validation}`}
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))
+                  ) : (
+                    <span className="multiselect-placeholder">Email validation status</span>
+                  )}
+                </div>
+                <div className="multiselect-actions">
+                  {filters.email_validation.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        clearAllEmailValidations();
+                      }}
+                      className="multiselect-clear-all"
+                      aria-label="Clear all selections"
+                    >
+                      ×
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    className={`multiselect-dropdown-arrow ${isEmailValidationDropdownOpen ? 'open' : ''}`}
+                    aria-label="Toggle dropdown"
+                  >
+                    ▼
+                  </button>
+                </div>
+              </div>
+
+              {isEmailValidationDropdownOpen && (
+                <div className="multiselect-dropdown" role="listbox">
+                  {emailValidationOptions.map((option, index) => {
+                    const isSelected = filters.email_validation.includes(option);
+                    return (
+                      <div
+                        key={index}
+                        className={`multiselect-option ${isSelected ? 'selected' : ''}`}
+                        onClick={() => handleEmailValidationSelect(option)}
+                        role="option"
+                        aria-selected={isSelected}
+                      >
+                        <span className="multiselect-option-text">{option}</span>
+                        {isSelected && (
+                          <span className="multiselect-checkmark">✓</span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="filter-field">
@@ -866,14 +1013,14 @@ function ExportContacts() {
         </div>
 
         <div className="button-group">
-          <button 
+          <button
             onClick={handleSearch}
             disabled={loading}
             className={`btn-search ${loading ? 'btn-disabled' : ''}`}
           >
             {loading ? 'Searching...' : 'Search Contacts'}
           </button>
-          <button 
+          <button
             onClick={handleClearFilters}
             className="btn-clear"
           >
@@ -931,7 +1078,7 @@ function ExportContacts() {
           </div>
 
           <div className="results-info">
-            Showing {results.length} of {totalContacts} contacts 
+            Showing {results.length} of {totalContacts} contacts
             (Page {currentPage} of {totalPages || 1})
           </div>
 
@@ -1011,7 +1158,7 @@ function ExportContacts() {
                       </td>
 
                       <td className="table-cell">
-                        <button 
+                        <button
                           onClick={() => openModal(contact)}
                           className="btn-view-extra"
                         >
@@ -1026,7 +1173,7 @@ function ExportContacts() {
           </div>
 
           <div className="pagination-container">
-            <button 
+            <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
               className={`btn-pagination ${currentPage === 1 ? 'btn-pagination-disabled' : ''}`}
@@ -1036,7 +1183,7 @@ function ExportContacts() {
             <span className="pagination-info">
               Page {currentPage} of {totalPages || 1}
             </span>
-            <button 
+            <button
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages || totalPages === 0}
               className={`btn-pagination ${(currentPage === totalPages || totalPages === 0) ? 'btn-pagination-disabled' : ''}`}
@@ -1050,7 +1197,7 @@ function ExportContacts() {
       {showModal && selectedContact && (
         <div className="modal-overlay" onClick={closeModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <button 
+            <button
               onClick={closeModal}
               className="modal-close"
             >
