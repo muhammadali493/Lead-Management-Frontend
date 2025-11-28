@@ -2,6 +2,12 @@ import { useState, useRef, useEffect } from 'react';
 import './ExportContacts.css';
 import { API_ENDPOINTS } from '../config/api';
 import NestedMultiSelect from './NestedMultiSelect';
+//MUI imports
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { TextField } from '@mui/material';
+import dayjs from 'dayjs';
 
 // Industry data structure
 const INDUSTRY_OPTIONS = {
@@ -87,7 +93,7 @@ function ExportContacts() {
     company_name: '',
     job_title: [],
     company_country: '',
-    company_industry: [], // Changed to array
+    company_industry: [], 
     company_city: '',
     company_size: '',
     contact_city: '',
@@ -111,7 +117,11 @@ function ExportContacts() {
   // state for email validation dropdown
   const [isEmailValidationDropdownOpen, setIsEmailValidationDropdownOpen] = useState(false);
   const emailValidationDropdownRef = useRef(null);
-
+  //Date range state
+  const [dateRange, setDateRange] = useState({
+    startDate: null,
+    endDate: null
+  });
   const [results, setResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -154,7 +164,7 @@ function ExportContacts() {
         console.log("User clicked Outside Company size range Dropdown")
         setIsSizeRangeDropdownOpen(false);
       }
-      if (emailValidationDropdownRef.current && !emailValidationDropdownRef.current.contains(event.target)){
+      if (emailValidationDropdownRef.current && !emailValidationDropdownRef.current.contains(event.target)) {
         console.log("User Clicked Outside Email Validation Dropdown")
         setIsEmailValidationDropdownOpen(false);
       }
@@ -174,7 +184,7 @@ function ExportContacts() {
     }));
     if (errorMessage) setErrorMessage('');
   };
-  
+
   // Handle company industry change
   const handleCompanyIndustryChange = (selectedIndustries) => {
     setFilters(prev => ({
@@ -322,6 +332,25 @@ function ExportContacts() {
       setIsEmailValidationDropdownOpen(false);
     }
   };
+
+  // Handle date range change
+  const handleDateRangeChange = (field, newValue) => {
+    setDateRange(prev => ({
+      ...prev,
+      [field]: newValue
+    }));
+    if (errorMessage) setErrorMessage('');
+  };
+
+  // Clear date range
+  const clearDateRange = () => {
+    setDateRange({
+      startDate: null,
+      endDate: null
+    });
+  };
+
+
   const handleSearch = async () => {
     setLoading(true);
     setShowResults(false);
@@ -348,7 +377,17 @@ function ExportContacts() {
           queryParams.set(key, value.trim());
         }
       });
+      if (dateRange.startDate) {
+        const formattedStartDate = dayjs(dateRange.startDate).format('YYYY-MM-DD');
+        queryParams.set('created_date_from', formattedStartDate);
+        queryParams.set('updated_at_from', formattedStartDate);
+      }
 
+      if (dateRange.endDate) {
+        const formattedEndDate = dayjs(dateRange.endDate).format('YYYY-MM-DD');
+        queryParams.set('created_date_to', formattedEndDate);
+        queryParams.set('updated_at_to', formattedEndDate);
+      }
       const limit = resultsPerPage;
       const offset = (currentPage - 1) * resultsPerPage;
       queryParams.set('limit', limit);
@@ -426,6 +465,7 @@ function ExportContacts() {
       email_total_ai: ''
     });
     setJobTitleInput(''); // Clear chip input
+    clearDateRange();
     setShowResults(false);
     setResults([]);
     setErrorMessage('');
@@ -473,7 +513,18 @@ function ExportContacts() {
           queryParams.set(key, value.trim());
         }
       });
+      // Add date range filters for export
+      if (dateRange.startDate) {
+        const formattedStartDate = dayjs(dateRange.startDate).format('YYYY-MM-DD');
+        queryParams.set('created_date_from', formattedStartDate);
+        queryParams.set('updated_at_from', formattedStartDate);
+      }
 
+      if (dateRange.endDate) {
+        const formattedEndDate = dayjs(dateRange.endDate).format('YYYY-MM-DD');
+        queryParams.set('created_date_to', formattedEndDate);
+        queryParams.set('updated_at_to', formattedEndDate);
+      }
       // Add format and mode parameters
       queryParams.set('format', exportFormat);
       queryParams.set('mode', exportMode);
@@ -808,14 +859,7 @@ function ExportContacts() {
               onChange={handleCompanyIndustryChange}
               placeholder="Select Industry"
             />
-            {/* <input
-              type="text"
-              name="company_industry"
-              value={filters.company_industry}
-              onChange={handleFilterChange}
-              placeholder="Enter company industry"
-              className="filter-input"
-            /> */}
+            
           </div>
 
           <div className="filter-field">
@@ -945,7 +989,7 @@ function ExportContacts() {
                       </div>
                     ))
                   ) : (
-                    <span className="multiselect-placeholder">Select company size ranges</span>
+                    <span className="multiselect-placeholder">Company size ranges</span>
                   )}
                 </div>
                 <div className="multiselect-actions">
@@ -996,17 +1040,6 @@ function ExportContacts() {
             </div>
           </div>
 
-          {/* <div className="filter-field">
-            <label className="filter-label">Email Validation</label>
-            <input
-              type="text"
-              name="email_validation"
-              value={filters.email_validation}
-              onChange={handleFilterChange}
-              placeholder="e.g., valid, invalid"
-              className="filter-input"
-            />
-          </div> */}
           <div className="filter-field">
             <label className="filter-label">Email Validation</label>
             <div className="multiselect-container" ref={emailValidationDropdownRef}>
@@ -1101,7 +1134,51 @@ function ExportContacts() {
             />
           </div>
         </div>
-
+        <div className="date-range-section">
+          <h3 className="date-range-title">Filter by Date Range</h3>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <div className="date-range-picker-container">
+              <div className="date-picker-field">
+                <DatePicker
+                  label="From Date"
+                  value={dateRange.startDate}
+                  onChange={(newValue) => handleDateRangeChange('startDate', newValue)}
+                  maxDate={dateRange.endDate || undefined}
+                  
+                  slotProps={{
+                    textField: {
+                      fullWidth: true,
+                      size: "small"
+                    }
+                  }}
+                />
+              </div>
+              <div className='date-picker-field'>
+                <DatePicker
+                  label="To Date"
+                  value={dateRange.endDate}
+                  onChange={(newValue) => handleDateRangeChange('endDate', newValue)}
+                  minDate={dateRange.startDate || undefined}
+                  
+                  slotProps={{
+                    textField: {
+                      fullWidth: true,
+                      size: 'small'
+                    }
+                  }}
+                />
+              </div>
+              <button
+                onClick={clearDateRange}
+                className='btn-clear-dates'
+                disabled={!dateRange.startDate && !dateRange.endDate}
+                title='Clear date range'
+              >
+                Clear Dates
+              </button>
+            </div>
+          </LocalizationProvider>
+        </div>
         <div className="button-group">
           <button
             onClick={handleSearch}
